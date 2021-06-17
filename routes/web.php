@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonaController;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+use function Ramsey\Uuid\v1;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/a', function () {
     $nombre = "ali";
     return view('layout',["nombre"=>$nombre]);
 });
@@ -29,3 +34,17 @@ Route::get('/home',function(){
 })->name('home');
 
 Route::resource('persona',PersonaController::class);
+
+
+Route::get('dashboard',function(){
+    return view('dashboard');
+})->name('dashboard')->middleware('auth');
+Route::get('',function(){
+    return view('welcome');
+});
+Route::get('login',function(){
+    return view('user/login');
+})->name('login')->middleware('guest');
+Route::post('login',[LoginController::class,'login']);
+Route::post('logout',[LoginController::class,'logout']);
+
